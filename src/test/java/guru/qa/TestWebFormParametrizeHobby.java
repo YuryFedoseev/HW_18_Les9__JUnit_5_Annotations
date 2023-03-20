@@ -18,7 +18,6 @@ public class TestWebFormParametrizeHobby extends TestBase {
                 .setFirstName(userName)
                 .setLastName(userLastName)
                 .setEmail(userEmail)
-                .setGender(userGender)
                 .setPhone(userPhone)
                 .setSubject(userSubject)
                 .setImage(userImage)
@@ -34,40 +33,47 @@ public class TestWebFormParametrizeHobby extends TestBase {
         checkRegistrationPage
                 .checkNameAndLastName(userName, userLastName)
                 .checkEmail(userEmail)
-                .checkGender(userGender)
                 .checkPhone(userPhone)
                 .checkSubject(userSubject)
                 .checkImage(userImageName)
-
                 .checkAddress(userAddress)
                 .checkState(userState)
                 .checkCity(userCity);
     }
 
     @ValueSource(strings = {"Music", "Sports", "Reading"})
-    @DisplayName("В форме заполнения выбор Хобби {0}")
+    @DisplayName("В форме заполнения параметризованный выбор Хобби {0}")
     @ParameterizedTest
 
     @Tag("Web")
     void checkingWhetherTheHobbyFieldWithDifferentValuesTest(String testData) {
 
         registrationPage
+                .setGender(userGender)
                 .setHobby(testData)
                 .setClickSubmit();
         checkRegistrationPage
-                .checkHobby(testData);
+                .checkHobby(testData)
+                .checkGender(userGender);
 
 
     }
 
-    @Test
-    void checkingTheHobbyIsNullTest() {
-        userHobby = null;
+    @ValueSource(strings = {"Female", "Male", "Other"})
+    @DisplayName("В форме заполнения параметризованный выбор Пола {0}")
+    @ParameterizedTest
+
+    @Tag("Web")
+    void checkingWhetherTheGenderFieldWithDifferentValuesTest(String testData) {
         registrationPage
+                .setGender(testData)
+                .setHobby(userHobby)
                 .setClickSubmit();
+        checkRegistrationPage
+                .checkHobby(userHobby)
+                .checkGender(testData);
 
 
     }
-
-
 }
+
