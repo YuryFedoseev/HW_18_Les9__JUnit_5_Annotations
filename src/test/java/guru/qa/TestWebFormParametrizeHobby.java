@@ -45,9 +45,9 @@ public class TestWebFormParametrizeHobby extends TestBase {
     }
 
     @ValueSource(strings = {"Music", "Sports", "Reading"})
-
-    @ParameterizedTest
     @DisplayName("В форме заполнения выбор Хобби {0}")
+    @ParameterizedTest
+
     @Tag("Web")
     void checkingWhetherTheHobbyFieldWithDifferentValuesTest(String testData) {
 
