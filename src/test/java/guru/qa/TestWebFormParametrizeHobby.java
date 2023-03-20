@@ -1,16 +1,17 @@
 package guru.qa;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import pages.CheckRegistrationPage;
 import pages.RegistrationPage;
 
-public class TestWebFormWithPageObject extends TestBase {
+public class TestWebFormParametrizeHobby extends TestBase {
     RegistrationPage registrationPage = new RegistrationPage();
     CheckRegistrationPage checkRegistrationPage = new CheckRegistrationPage();
 
-    @Test
-    void fullSuccessTest() {
-
+    @BeforeEach
+    void openPageAndKillBannerAndSetFieldsExceptHobby() {
         registrationPage
                 .openPage()
                 .closeBanner()
@@ -20,12 +21,16 @@ public class TestWebFormWithPageObject extends TestBase {
                 .setGender(userGender)
                 .setPhone(userPhone)
                 .setSubject(userSubject)
-                .setHobby(userHobby)
                 .setImage(userImage)
                 .setAddress(userAddress)
                 .setState(userState)
-                .setCity(userCity)
-                .setClickSubmit();
+                .setCity(userCity);
+
+
+    }
+
+    @AfterEach
+    void checkAllFieldExceptHobby() {
         checkRegistrationPage
                 .checkNameAndLastName(userName, userLastName)
                 .checkEmail(userEmail)
@@ -33,10 +38,34 @@ public class TestWebFormWithPageObject extends TestBase {
                 .checkPhone(userPhone)
                 .checkSubject(userSubject)
                 .checkImage(userImageName)
-                .checkHobby(userHobby)
+
                 .checkAddress(userAddress)
                 .checkState(userState)
                 .checkCity(userCity);
+    }
+
+    @ValueSource(strings = {"Music", "Sports", "Reading"})
+
+    @ParameterizedTest
+    @DisplayName("В форме заполнения выбор Хобби {0}")
+    @Tag("Web")
+    void checkingWhetherTheHobbyFieldWithDifferentValuesTest(String testData) {
+
+        registrationPage
+                .setHobby(testData)
+                .setClickSubmit();
+        checkRegistrationPage
+                .checkHobby(testData);
+
+
+    }
+
+    @Test
+    void checkingTheHobbyIsNullTest() {
+        userHobby = null;
+        registrationPage
+                .setClickSubmit();
+
 
     }
 
