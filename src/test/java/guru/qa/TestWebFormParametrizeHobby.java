@@ -2,59 +2,56 @@ package guru.qa;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import pages.CheckRegistrationPage;
 import pages.RegistrationPage;
 
 public class TestWebFormParametrizeHobby extends TestBase {
+    private TestData testData = new TestData() ;
     RegistrationPage registrationPage = new RegistrationPage();
     CheckRegistrationPage checkRegistrationPage = new CheckRegistrationPage();
+
 
     @BeforeEach
     void openPageAndKillBannerAndSetFieldsExceptHobby() {
         registrationPage
                 .openPage()
                 .closeBanner()
-                .setFirstName(userName)
-                .setLastName(userLastName)
-                .setEmail(userEmail)
-                .setPhone(userPhone)
-                .setSubject(userSubject)
-                .setImage(userImage)
-                .setAddress(userAddress)
-                .setState(userState)
-                .setCity(userCity);
+                .setFirstName(testData.userName)
+                .setLastName(testData.userLastName)
+                .setEmail(testData.userEmail)
+                .setPhone(testData.userPhone)
+                .setSubject(testData.userSubject)
+                .setImage(testData.userImage)
+                .setAddress(testData.userAddress)
+                .setState(testData.userState)
+                .setCity(testData.userCity)
+                .setGender(testData.userGender)
+                .setHobby(testData.userHobby)
+                .setGender(testData.userGender)
+                .setHobby(testData.userHobby);
+
 
 
     }
 
-    @AfterEach
-    void checkAllFieldExceptHobby() {
-        checkRegistrationPage
-                .checkNameAndLastName(userName, userLastName)
-                .checkEmail(userEmail)
-                .checkPhone(userPhone)
-                .checkSubject(userSubject)
-                .checkImage(userImageName)
-                .checkAddress(userAddress)
-                .checkState(userState)
-                .checkCity(userCity);
-    }
+
 
     @ValueSource(strings = {"Music", "Sports", "Reading"})
-    @DisplayName("В форме заполнения параметризованный выбор Хобби {0}")
-    @ParameterizedTest
+    @DisplayName("Параметризованный тест выбора хобби на форме регистрации")
+    @ParameterizedTest (name ="В форме заполнения выбор Хобби -  {0}")
 
     @Tag("Web")
     void checkingWhetherTheHobbyFieldWithDifferentValuesTest(String testData) {
 
+
         registrationPage
-                .setGender(userGender)
                 .setHobby(testData)
                 .setClickSubmit();
         checkRegistrationPage
-                .checkHobby(testData)
-                .checkGender(userGender);
+                .checkHobby(testData);
 
 
     }
@@ -65,13 +62,33 @@ public class TestWebFormParametrizeHobby extends TestBase {
 
     @Tag("Web")
     void checkingWhetherTheGenderFieldWithDifferentValuesTest(String testData) {
+
         registrationPage
                 .setGender(testData)
-                .setHobby(userHobby)
                 .setClickSubmit();
         checkRegistrationPage
-                .checkHobby(userHobby)
                 .checkGender(testData);
+
+
+    }
+
+
+   // @CsvSource (value = "a,b")
+    @CsvFileSource(resources = "/testData/checkingWhetherTheSityFieldWithDifferentValuesTest.csv")
+//    @DisplayName
+    @ParameterizedTest (name = "В форме заполнения параметризованный выбор страны -{0}  и города {1}")
+
+    @Tag("Web")
+    void checkingWhetherTheSityFieldWithDifferentValuesTest(String testData, String expectedText) {
+
+        registrationPage
+
+                .setState(testData)
+                .setCity(expectedText)
+                .setClickSubmit();
+        checkRegistrationPage
+                .checkState(testData)
+               .checkCity(expectedText);
 
 
     }
