@@ -8,11 +8,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import pages.CheckRegistrationPage;
 import pages.RegistrationPage;
 
-public class TestWebFormParametrizeHobby extends TestBase {
+public class TestWebFormParametrize extends TestBase {
     private TestData testData = new TestData() ;
     RegistrationPage registrationPage = new RegistrationPage();
     CheckRegistrationPage checkRegistrationPage = new CheckRegistrationPage();
-
 
     @BeforeEach
     void openPageAndKillBannerAndSetFieldsExceptHobby() {
@@ -33,8 +32,6 @@ public class TestWebFormParametrizeHobby extends TestBase {
                 .setGender(testData.userGender)
                 .setHobby(testData.userHobby);
 
-
-
     }
 
 
@@ -42,10 +39,8 @@ public class TestWebFormParametrizeHobby extends TestBase {
     @ValueSource(strings = {"Music", "Sports", "Reading"})
     @DisplayName("Параметризованный тест выбора хобби на форме регистрации")
     @ParameterizedTest (name ="В форме заполнения выбор Хобби -  {0}")
-
     @Tag("Web")
     void checkingWhetherTheHobbyFieldWithDifferentValuesTest(String testData) {
-
 
         registrationPage
                 .setHobby(testData)
@@ -57,9 +52,8 @@ public class TestWebFormParametrizeHobby extends TestBase {
     }
 
     @ValueSource(strings = {"Female", "Male", "Other"})
-    @DisplayName("В форме заполнения параметризованный выбор Пола {0}")
-    @ParameterizedTest
-
+    @DisplayName("Параметризованный тест выбора пола на форме регистрации")
+    @ParameterizedTest (name = "В форме заполнения параметризованный выбор Пола {0}")
     @Tag("Web")
     void checkingWhetherTheGenderFieldWithDifferentValuesTest(String testData) {
 
@@ -73,13 +67,11 @@ public class TestWebFormParametrizeHobby extends TestBase {
     }
 
 
-   // @CsvSource (value = "a,b")
-    @CsvFileSource(resources = "/testData/checkingWhetherTheSityFieldWithDifferentValuesTest.csv")
-//    @DisplayName
+    @CsvFileSource(resources = "/testData/checkingWhetherTheCityFieldWithDifferentValuesTest.csv")
     @ParameterizedTest (name = "В форме заполнения параметризованный выбор страны -{0}  и города {1}")
-
+    @DisplayName("Параметризованный тест выбора места локации на форме регистрации")
     @Tag("Web")
-    void checkingWhetherTheSityFieldWithDifferentValuesTest(String testData, String expectedText) {
+    void checkingWhetherTheCityFieldWithDifferentValuesTest(String testData, String expectedText) {
 
         registrationPage
 
@@ -89,6 +81,28 @@ public class TestWebFormParametrizeHobby extends TestBase {
         checkRegistrationPage
                 .checkState(testData)
                .checkCity(expectedText);
+
+    }
+
+
+    @CsvSource(value ={
+            "Sirius, Black",
+            "Draco, Malfoy",
+            "Dolores, Umbridge",
+            "Harry, Potter"})
+
+    @ParameterizedTest (name = "В форме заполнения параметризованный выбор Имени -{0}  и Фамилии- {1}")
+    @DisplayName("Параметризованный тест выбора связки имен и фамилий на форме регистрации")
+    @Tag("Web")
+    void checkingWhetherTheNameAndLastNameFieldWithDifferentValuesTest(String testData, String expectedText) {
+
+        registrationPage
+
+                .setFirstName(testData)
+                .setLastName(expectedText)
+                .setClickSubmit();
+        checkRegistrationPage
+                .checkNameAndLastName(testData,expectedText );
 
 
     }

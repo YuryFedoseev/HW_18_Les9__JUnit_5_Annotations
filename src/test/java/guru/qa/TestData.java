@@ -51,7 +51,7 @@ public class TestData {
     public String userCityMetod() {
         switch (userState) {
             case "NCR": {
-                String[] userCityArray = {"Delphi", "Gurgaon", "Noida"};
+                String[] userCityArray = {"Delhi", "Gurgaon", "Noida"};
                 userCity = getRandomFieldFromArray(userCityArray);
                 break;
             }
