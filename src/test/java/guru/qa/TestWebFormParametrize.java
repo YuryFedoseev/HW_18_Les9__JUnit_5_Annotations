@@ -67,7 +67,7 @@ public class TestWebFormParametrize extends TestBase {
     }
 
 
-    @CsvFileSource(resources = "/testData/checkingWhetherTheCityFieldWithDifferentValuesTest.csv")
+    @CsvFileSource(resources = "/testdata/checkingWhetherTheCityFieldWithDifferentValuesTest.csv")
     @ParameterizedTest (name = "В форме заполнения параметризованный выбор страны -{0}  и города {1}")
     @DisplayName("Параметризованный тест выбора места локации на форме регистрации")
     @Tag("Web")
